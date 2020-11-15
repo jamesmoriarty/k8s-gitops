@@ -20,8 +20,7 @@ spec:
       volumes:
         - name: downloads
           hostPath:
-            # TODO: remove home path.
-            path: /home/james/Downloads
+            path: /var/hombernetes/downloads
             type: Directory
       containers:
       - image: vladgh/minidlna
@@ -37,3 +36,19 @@ spec:
         volumeMounts:
         - mountPath: /downloads
           name: downloads
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 2
+          successThreshold: 1
+          tcpSocket:
+            port: 8020
+          timeoutSeconds: 2
+        readinessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 10
+          periodSeconds: 2
+          successThreshold: 2
+          tcpSocket:
+            port: 8020
+          timeoutSeconds: 2

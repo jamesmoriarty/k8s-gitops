@@ -19,8 +19,7 @@ spec:
       volumes:
         - name: downloads
           hostPath:
-            # TODO: remove home path.
-            path: /home/james/Downloads
+            path: /var/hombernetes/downloads
             type: Directory
       containers:
       - image: ghcr.io/linuxserver/transmission

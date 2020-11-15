@@ -1,5 +1,9 @@
 #!/bin/sh -ex
 
+# Refinment: use user home host storage:
+mkdir -p /var/hombernetes/
+sudo ln -sf /var/hombernetes/ "$HOME/Downloads"
+
 sudo snap install microk8s --classic
 
 # Bugfix: least priv user:
