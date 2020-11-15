@@ -1,0 +1,20 @@
+# Hombernetes
+
+Repo for my gitops home kubernetes "cluster".
+
+## Features
+
+* Transmission
+* MiniDLNA
+
+## Requirements
+
+```
+Ubuntu 20.04.1 LTS
+```
+
+## Setup
+
+```
+bootstrap.sh
+```

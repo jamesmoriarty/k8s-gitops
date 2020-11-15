@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: minidlna
+  name: minidlna
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minidlna
+  template:
+    metadata:
+      labels:
+        app: minidlna
+    spec:
+      hostNetwork: true
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: downloads
+          hostPath:
+            # TODO: remove home path.
+            path: /home/james/Downloads
+            type: Directory
+      containers:
+      - image: vladgh/minidlna
+        name: minidlna
+        ports:
+        - containerPort: 8020
+          protocol: TCP
+        - containerPort: 1900
+          protocol: UDP
+        env:
+        - name: MINIDLNA_MEDIA_DIR
+          value: /downloads
+        volumeMounts:
+        - mountPath: /downloads
+          name: downloads
