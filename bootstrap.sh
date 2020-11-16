@@ -16,6 +16,7 @@ microk8s status --wait-ready
 microk8s enable \
 	dashboard \
 	dns \
+	ingress \
 	storage
 
 # Refinement: aliases:

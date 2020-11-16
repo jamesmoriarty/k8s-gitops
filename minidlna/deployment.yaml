@@ -6,6 +6,9 @@ metadata:
   name: minidlna
 spec:
   replicas: 1
+  # N.B. required to avoid hostNetwork port conflict.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: minidlna
@@ -14,6 +17,7 @@ spec:
       labels:
         app: minidlna
     spec:
+      # N.B. required for UPnP LAN broadcast/advertisement. 
       hostNetwork: true
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -36,19 +40,3 @@ spec:
         volumeMounts:
         - mountPath: /downloads
           name: downloads
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 2
-          successThreshold: 1
-          tcpSocket:
-            port: 8020
-          timeoutSeconds: 2
-        readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 2
-          successThreshold: 2
-          tcpSocket:
-            port: 8020
-          timeoutSeconds: 2
