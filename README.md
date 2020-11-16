@@ -5,8 +5,9 @@ Repo for my gitops home kubernetes "cluster".
 ## Features
 
 * Microk8s
-* Transmission
-* MiniDLNA
+* ExternalDNS (AWS/Route53)
+* Transmission (NAT/UDP)
+* MiniDLNA (UPnP/UDP)
 
 ## Requirements
 

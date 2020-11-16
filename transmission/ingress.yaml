@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: localhost
+  - host: transmission.home.jamesmoriarty.xyz
     http:
       paths:
       - path: /

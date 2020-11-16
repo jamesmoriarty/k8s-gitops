@@ -6,7 +6,7 @@ metadata:
   name: minidlna
 spec:
   replicas: 1
-  # N.B. required to avoid hostNetwork port conflict.
+  # N.B. required to avoid hostNetwork single node port conflict.
   strategy:
     type: Recreate
   selector:
@@ -17,7 +17,7 @@ spec:
       labels:
         app: minidlna
     spec:
-      # N.B. required for UPnP LAN broadcast/advertisement. 
+      # N.B. The uPnP UDP broadcast’s are coming from the pod’s internal address are being dropped by the node before it egresses into your home network. 
       hostNetwork: true
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -35,6 +35,8 @@ spec:
         - containerPort: 1900
           protocol: UDP
         env:
+        - name: MINIDLNA_FRIENDLY_NAME
+          value: hombernetes
         - name: MINIDLNA_MEDIA_DIR
           value: /downloads
         volumeMounts:

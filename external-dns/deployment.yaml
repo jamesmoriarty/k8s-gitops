@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      containers:
+      - name: external-dns
+        image: k8s.gcr.io/external-dns/external-dns:v0.7.4
+        args:
+        - --source=service
+        - --source=ingress
+        - --provider=aws
+        - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both)
+        - --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization
+        - --registry=txt
+        env:
+        - name: EXTERNAL_DNS_DOMAIN_FILTER # will make ExternalDNS see only the hosted zones matching provided domain, omit to process all available hosted zones
+          valueFrom:
+            secretKeyRef:
+              name: external-dns
+              key: EXTERNAL_DNS_DOMAIN_FILTER
+        - name: EXTERNAL_DNS_TXT_OWNER_ID
+          valueFrom:
+            secretKeyRef:
+              name: external-dns
+              key: EXTERNAL_DNS_TXT_OWNER_ID
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: external-dns
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: external-dns
+              key: AWS_SECRET_ACCESS_KEY
