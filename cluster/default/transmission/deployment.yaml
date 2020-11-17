@@ -30,6 +30,11 @@ spec:
           protocol: TCP
         - containerPort: 51413
           protocol: UDP
+        env:
+        - name: USER
+          value: username # N.B. https://forum.transmissionbt.com/viewtopic.php?t=19727
+        - name: PASS
+          value: password # N.B. https://forum.transmissionbt.com/viewtopic.php?t=19727
         volumeMounts:
         - mountPath: /downloads
           name: downloads
