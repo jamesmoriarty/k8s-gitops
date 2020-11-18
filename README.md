@@ -1,6 +1,6 @@
 # k8s-gitops
 
-Repo for my k8s-gitops home lab.
+Repo for my k8s home lab.
 
 ## Features
 
