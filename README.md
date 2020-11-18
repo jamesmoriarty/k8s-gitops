@@ -1,4 +1,4 @@
-# Hombernetes
+# k8s-gitops
 
 Repo for my k8s-gitops home lab.
 
@@ -9,6 +9,7 @@ Repo for my k8s-gitops home lab.
 ## Features
 
 * Microk8s (Host Storage)
+* Flux
 * MetalLB
 * ExternalDNS (AWS/Route53)
 * Transmission (NAT/UDP)
