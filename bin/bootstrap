@@ -35,7 +35,7 @@ curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
 # ✔ Kubernetes  >=1.16.0
 # ✔ prerequisites checks passed
 
-snap install kubectl --classic
+sudo snap install kubectl --classic
 flux check --pre
 
 flux bootstrap github \
@@ -47,4 +47,5 @@ flux bootstrap github \
 
  flux create source git k8s-gitops \
   --url=ssh://git@github.com/jamesmoriarty/k8s-gitops \
-  --branch=main
+  --branch=main \
+  --interval=10m
