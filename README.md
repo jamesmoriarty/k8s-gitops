@@ -2,10 +2,6 @@
 
 Repo for my k8s-gitops home lab.
 
-## Diagram
-
-![Arch](docs/arch.png)
-
 ## Features
 
 * Microk8s (Host Storage)
@@ -14,6 +10,11 @@ Repo for my k8s-gitops home lab.
 * ExternalDNS (AWS/Route53)
 * Transmission (NAT/UDP)
 * MiniDLNA (UPnP/UDP)
+
+## Diagram
+
+![Arch](docs/arch.png)
+
 
 ## Requirements
 
