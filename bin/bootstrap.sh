@@ -14,10 +14,10 @@ sudo snap install microk8s --classic
 microk8s status --wait-ready
 
 microk8s enable \
-	dashboard \
 	dns \
-	metallb \
-	storage
+	storage \
+	dashboard \
+	metallb
 
 # Refinement: aliases:
 # cat <<-EOF > ~/.bash_aliases
