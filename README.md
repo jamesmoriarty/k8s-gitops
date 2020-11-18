@@ -13,7 +13,6 @@ Repo for my k8s-gitops home lab.
 * ExternalDNS (AWS/Route53)
 * Transmission (NAT/UDP)
 * MiniDLNA (UPnP/UDP)
-* Radarr & Jackett
 
 ## Requirements
 

@@ -26,5 +26,7 @@ microk8s enable \
 # alias kgp='microk8s kubectl get pods'
 # EOF
 
+microk8s kubectl apply -f cluster/metallb-system/
+microk8s kubectl apply -f cluster/default/external-dns
 microk8s kubectl apply -f cluster/default/transmission
 microk8s kubectl apply -f cluster/default/minidlna
