@@ -9,7 +9,7 @@ Repo for my k8s-gitops home lab.
 ## Features
 
 * Microk8s (Host Storage)
-* Flux
+* Flux2
 * MetalLB
 * ExternalDNS (AWS/Route53)
 * Transmission (NAT/UDP)
@@ -24,5 +24,5 @@ Ubuntu 20.04.1 LTS
 ## Setup
 
 ```
-bootstrap.sh
+GITHUB_USERNAME= GITHUB_TOKEN= bin/bootstrap
 ```

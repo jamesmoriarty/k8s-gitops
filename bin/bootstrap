@@ -1,0 +1,50 @@
+#!/bin/sh -ex
+
+sudo snap install microk8s --classic
+
+# Bugfix: least priv user:
+#
+# sudo usermod -a -G microk8s $USER
+# sudo reboot
+
+microk8s status --wait-ready
+
+microk8s enable \
+	dns \
+	storage \
+	dashboard \
+	metallb
+
+# Refinment: use user home host storage:
+
+sudo mkdir -p /var/k8s-gitops/
+sudo ln -sf /var/k8s-gitops/ "$HOME/Downloads"
+
+# Refinement: aliases:
+#
+# cat <<-EOF > ~/.bash_aliases
+# alias kubectl='microk8s kubectl'
+# alias k='microk8s kubectl'
+# alias kgp='microk8s kubectl get pods'
+# EOF
+
+curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
+
+# Bugfix: Prerequisites.
+# ✔ kubectl >=1.18.0
+# ✔ Kubernetes  >=1.16.0
+# ✔ prerequisites checks passed
+
+snap install kubectl --classic
+flux check --pre
+
+flux bootstrap github \
+  --owner=$GITHUB_USER \
+  --repository=k8s-gitops \
+  --branch=main \
+  --path=cluster \
+  --personal
+
+ flux create source git k8s-gitops \
+  --url=ssh://git@github.com/jamesmoriarty/k8s-gitops \
+  --branch=main
