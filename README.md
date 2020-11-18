@@ -2,6 +2,10 @@
 
 Repo for my k8s-gitops home lab.
 
+## Diagram
+
+![Arch](docs/arch.png)
+
 ## Features
 
 * Microk8s (Host Storage)
