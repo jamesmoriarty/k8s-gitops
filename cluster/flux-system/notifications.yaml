@@ -1,0 +1,10 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta1
+kind: Provider
+metadata:
+  name: slack
+  namespace: flux-system
+spec:
+  type: slack
+  channel: general
+  secretRef:
+    name: slack-url # kubectl -n flux-system create secret generic slack-url --from-literal=address=https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK
