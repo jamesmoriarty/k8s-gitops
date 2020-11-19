@@ -14,3 +14,9 @@ spec:
         name: prometheus-community
         namespace: flux-system
       interval: 1m
+  values:
+    prometheus:
+      service:
+        annotations:
+          external-dns.alpha.kubernetes.io/hostname: "prometheus.home.jamesmoriarty.xyz"
+        type: LoadBalancer
