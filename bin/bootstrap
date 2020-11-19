@@ -44,8 +44,3 @@ flux bootstrap github \
   --branch=main \
   --path=cluster \
   --personal
-
- flux create source git k8s-gitops \
-  --url=ssh://git@github.com/jamesmoriarty/k8s-gitops \
-  --branch=main \
-  --interval=10m
