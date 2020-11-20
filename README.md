@@ -28,3 +28,10 @@ Ubuntu 20.04.1 LTS
 ```
 GITHUB_USERNAME= GITHUB_TOKEN= bin/bootstrap
 ```
+
+## Notes
+
+- http://transmission.home.jamesmoriarty.xyz
+- http://alertmanager.home.jamesmoriarty.xyz:9093/
+- http://grafana.home.jamesmoriarty.xyz/
+- http://prometheus.home.jamesmoriarty.xyz:9090/

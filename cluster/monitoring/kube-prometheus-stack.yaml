@@ -25,10 +25,10 @@ spec:
           group_interval: 5m
           repeat_interval: 12h
           receiver: 'slack-notifications'
-        routes:
-        - receiver: 'null'
-          match:
-            alertname: Watchdog
+          routes:
+          - receiver: 'null'
+            match:
+              alertname: Watchdog
         receivers:
         - name: 'null'
         - name: 'slack-notifications'
@@ -47,6 +47,8 @@ spec:
           external-dns.alpha.kubernetes.io/hostname: "grafana.home.jamesmoriarty.xyz"
         type: LoadBalancer
     prometheus:
+      prometheusSpec:
+        externalUrl: 'http://prometheus.home.jamesmoriarty.xyz:9090/'
       service:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "prometheus.home.jamesmoriarty.xyz"
