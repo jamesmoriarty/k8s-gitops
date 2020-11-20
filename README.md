@@ -10,6 +10,7 @@ Repo for my k8s home lab.
 * ExternalDNS (AWS/Route53)
 * Transmission (NAT/UDP)
 * MiniDLNA (UPnP/UDP)
+* Monitoring (Helm/kube-prometheus-stack)
 
 ## Diagram
 
