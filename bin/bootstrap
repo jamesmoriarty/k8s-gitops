@@ -36,6 +36,7 @@ curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
 # ✔ prerequisites checks passed
 
 sudo snap install kubectl --classic
+
 flux check --pre
 
 flux bootstrap github \
@@ -45,17 +46,19 @@ flux bootstrap github \
   --path=cluster \
   --personal
 
-flux create source git monitoring \
-  --interval=30m \
-  --url=https://github.com/fluxcd/flux2 \
-  --branch=main
+# TODO: Can I merge this with the existing Prometheus.
 
-flux create kustomization monitoring \
-  --interval=1h \
-  --prune=true \
-  --source=monitoring \
-  --path="./manifests/monitoring" \
-  --health-check="Deployment/prometheus.flux-system" \
-  --health-check="Deployment/grafana.flux-system"
+# flux create source git monitoring \
+#   --interval=30m \
+#   --url=https://github.com/fluxcd/flux2 \
+#   --branch=main
+
+# flux create kustomization monitoring \
+#   --interval=1h \
+#   --prune=true \
+#   --source=monitoring \
+#   --path="./manifests/monitoring" \
+#   --health-check="Deployment/prometheus.flux-system" \
+#   --health-check="Deployment/grafana.flux-system"
 
 # kubectl -n flux-system port-forward svc/grafana 3000:3000
