@@ -95,6 +95,10 @@ spec:
         annotations:
           external-dns.alpha.kubernetes.io/hostname: "grafana.home.jamesmoriarty.xyz"
         type: LoadBalancer
+      additionalDataSources:
+        - name: Loki
+          type: loki
+          url:  http://loki-stack.monitoring.svc.cluster.local:3100
 
     prometheus:
       prometheusSpec:
