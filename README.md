@@ -11,6 +11,7 @@ Repo for my k8s home lab.
 * Transmission (NAT/UDP)
 * MiniDLNA (UPnP/UDP)
 * Monitoring (Helm/kube-prometheus-stack)
+* Logging (Helm/loki-stack)
 
 ## Diagram
 
@@ -33,5 +34,5 @@ GITHUB_USERNAME= GITHUB_TOKEN= bin/bootstrap
 
 - http://transmission.home.jamesmoriarty.xyz
 - http://alertmanager.home.jamesmoriarty.xyz:9093/
-- http://grafana.home.jamesmoriarty.xyz/
+- http://grafana.home.jamesmoriarty.xyz/explore
 - http://prometheus.home.jamesmoriarty.xyz:9090/
