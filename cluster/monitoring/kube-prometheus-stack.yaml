@@ -15,34 +15,6 @@ spec:
         namespace: flux-system
       interval: 1m
   values: # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
-    defaultRules:
-      create: true
-      rules:
-        alertmanager: true
-        etcd: true
-        general: true
-        k8s: true
-        kubeApiserver: true
-        kubeApiserverAvailability: true
-        kubeApiserverError: true
-        kubeApiserverSlos: true
-        kubelet: false
-        kubePrometheusGeneral: true
-        kubePrometheusNodeAlerting: true
-        kubePrometheusNodeRecording: true
-        kubernetesAbsent: false
-        kubernetesApps: true
-        kubernetesResources: true
-        kubernetesStorage: true
-        kubernetesSystem: false
-        kubeScheduler: false
-        kubeStateMetrics: true
-        network: true
-        node: true
-        prometheus: true
-        prometheusOperator: true
-        time: true
-
     kubeControllerManager:
       enabled: false
 
