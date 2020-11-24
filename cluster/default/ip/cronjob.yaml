@@ -15,7 +15,7 @@ spec:
             - /bin/sh
             - -c
             - |
-              cat << EOF > /tmp/service.yml && kubectl apply -f /tmp/service.yml
+              cat << EOF > /tmp/ingress.yml && kubectl apply -f /tmp/ingress.yml
               apiVersion: networking.k8s.io/v1
               kind: Ingress
               metadata:
