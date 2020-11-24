@@ -16,21 +16,17 @@ spec:
             - -c
             - |
               cat << EOF > /tmp/service.yml && kubectl apply -f /tmp/service.yml
-              apiVersion: v1
-              kind: Service
+              apiVersion: networking.k8s.io/v1
+              kind: Ingress
               metadata:
-                name: ip
+                name: nginx
                 annotations:
+                  kubernetes.io/ingress.class: nginx
                   external-dns.alpha.kubernetes.io/hostname: '$IP_HOSTNAME'
                   external-dns.alpha.kubernetes.io/target: '$(curl --silent ifconfig.me)'
               spec:
-                type: LoadBalancer
-                selector:
-                  app: supercalifragilisticexpialidocious
-                ports:
-                - protocol: TCP
-                  port: 8080
-                  targetPort: 8080
+                rules:
+                - host: ip.home.jamesmoriarty.xyz
               EOF
             env:
             - name: IP_HOSTNAME
