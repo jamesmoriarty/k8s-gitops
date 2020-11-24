@@ -1,0 +1,34 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ip
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: ip
+            image: bitnami/kubectl
+            command:
+            - /bin/sh
+            - -c
+            - |
+              cat << EOF > /tmp/service.yml && kubectl apply -f /tmp/service.yml
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: ip
+                annotations:
+                  external-dns.alpha.kubernetes.io/hostname: 'ip.home.jamesmoriarty.xyz'
+                  external-dns.alpha.kubernetes.io/target: '$(curl --silent ifconfig.me)'
+              spec:
+                selector:
+                  app: supercalifragilisticexpialidocious
+                ports:
+                - protocol: TCP
+                  port: 8080
+                  targetPort: 8080
+              EOF
+          restartPolicy: OnFailure
