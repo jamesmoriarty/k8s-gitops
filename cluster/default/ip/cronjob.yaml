@@ -21,7 +21,7 @@ spec:
               metadata:
                 name: ip
                 annotations:
-                  external-dns.alpha.kubernetes.io/hostname: 'ip.home.jamesmoriarty.xyz'
+                  external-dns.alpha.kubernetes.io/hostname: '$IP_HOSTNAME'
                   external-dns.alpha.kubernetes.io/target: '$(curl --silent ifconfig.me)'
               spec:
                 selector:
@@ -31,4 +31,7 @@ spec:
                   port: 8080
                   targetPort: 8080
               EOF
+            env:
+            - name: IP_HOSTNAME
+              value: ip.home.jamesmoriarty.xyz
           restartPolicy: OnFailure
