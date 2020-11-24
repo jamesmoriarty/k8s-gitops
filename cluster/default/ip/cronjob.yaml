@@ -26,7 +26,7 @@ spec:
                   external-dns.alpha.kubernetes.io/target: '$(curl --silent ifconfig.me)'
               spec:
                 rules:
-                - host: ip.home.jamesmoriarty.xyz
+                - host: '$IP_HOSTNAME'
               EOF
             env:
             - name: IP_HOSTNAME
