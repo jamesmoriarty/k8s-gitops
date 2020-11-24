@@ -6,8 +6,9 @@ Repo for my k8s home lab.
 
 * Microk8s (Host Storage)
 * Flux2
-* MetalLB
+* MetalLB (L2)
 * ExternalDNS (AWS/Route53)
+* DynamicDNS (CronJob/ExternalDNS/Service)
 * Transmission (NAT/UDP)
 * MiniDLNA (UPnP/UDP)
 * Monitoring (Helm/kube-prometheus-stack)
