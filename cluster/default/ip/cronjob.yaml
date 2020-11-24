@@ -19,7 +19,7 @@ spec:
               apiVersion: networking.k8s.io/v1
               kind: Ingress
               metadata:
-                name: nginx
+                name: ip
                 annotations:
                   kubernetes.io/ingress.class: nginx
                   external-dns.alpha.kubernetes.io/hostname: '$IP_HOSTNAME'
