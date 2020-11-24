@@ -7,9 +7,9 @@ sudo snap install microk8s --classic
 # sudo usermod -a -G microk8s $USER
 # sudo reboot
 
-microk8s status --wait-ready
+sudo microk8s status --wait-ready
 
-microk8s enable \
+sudo microk8s enable \
 	dns \
 	storage \
 	dashboard \
@@ -45,20 +45,3 @@ flux bootstrap github \
   --branch=main \
   --path=cluster \
   --personal
-
-# TODO: Can I merge this with the existing Prometheus.
-
-# flux create source git monitoring \
-#   --interval=30m \
-#   --url=https://github.com/fluxcd/flux2 \
-#   --branch=main
-
-# flux create kustomization monitoring \
-#   --interval=1h \
-#   --prune=true \
-#   --source=monitoring \
-#   --path="./manifests/monitoring" \
-#   --health-check="Deployment/prometheus.flux-system" \
-#   --health-check="Deployment/grafana.flux-system"
-
-# kubectl -n flux-system port-forward svc/grafana 3000:3000
