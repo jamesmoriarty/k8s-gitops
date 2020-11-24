@@ -1,0 +1,28 @@
+#!/bin/sh -ex
+
+sudo wg show && exit || echo "Installing..."
+
+sudo apt install -y wireguard
+
+mkdir -p $HOME/wireguard
+umask 077
+wg genkey | tee $HOME/wireguard/privatekey | wg pubkey > $HOME/wireguard/publickey
+
+sudo tee "/etc/wireguard/wg0.conf" > /dev/null <<EOF
+[Interface]
+PrivateKey = $(cat $HOME/wireguard/privatekey)
+Address = 10.0.0.1/24, fd86:ea04:1115::1/64
+ListenPort = 51820
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; ip6tables -A FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; ip6tables -D FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+SaveConfig = true
+EOF
+
+# sudo ufw status verbose
+# sudo ufw allow 22/tcp
+# sudo ufw allow 51820/udp
+# sudo ufw enable
+
+wg-quick up wg0
+sudo systemctl enable wg-quick@wg0
+sudo wg show
