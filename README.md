@@ -35,6 +35,6 @@ GITHUB_USERNAME= GITHUB_TOKEN= bin/bootstrap
 ## Notes
 
 - http://transmission.home.jamesmoriarty.xyz
-- http://alertmanager.home.jamesmoriarty.xyz:9093/
+- http://alertmanager.home.jamesmoriarty.xyz/
 - http://grafana.home.jamesmoriarty.xyz/explore
-- http://prometheus.home.jamesmoriarty.xyz:9090/
+- http://prometheus.home.jamesmoriarty.xyz/

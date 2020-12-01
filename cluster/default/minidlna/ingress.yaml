@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: upnp
+  namespace: default
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: 'upnp.home.jamesmoriarty.xyz'
+spec:
+  rules:
+  - host: 'upnp.home.jamesmoriarty.xyz'
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: upnp
+            port:
+              number: 8200

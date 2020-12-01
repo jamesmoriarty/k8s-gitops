@@ -14,16 +14,16 @@ metadata:
   name: kube-prometheus-stack
   namespace: monitoring
 spec:
-  interval: 1m
+  interval: 2m
   chart:
     spec:
       chart: kube-prometheus-stack
-      version: '12.2.0'
+      version: '12.3.0'
       sourceRef:
         kind: HelmRepository
         name: prometheus-community
         namespace: monitoring
-      interval: 1m
+      interval: 2m
 
   values: # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
     defaultRules:
@@ -42,11 +42,11 @@ spec:
         kubePrometheusNodeAlerting: true
         kubePrometheusNodeRecording: true
         kubernetesAbsent: true
-        kubernetesApps: true
-        kubernetesResources: true
+        kubernetesApps: false # kube-state-metrics crash
+        kubernetesResources: false # over committed on single node
         kubernetesStorage: true
-        kubernetesSystem: false
-        kubeScheduler: false
+        kubernetesSystem: false # can't scrape
+        kubeScheduler: false # can't scrape
         kubeStateMetrics: true
         network: true
         node: true
@@ -55,17 +55,18 @@ spec:
         time: true
 
     kubelet:
-      enabled: false
+      enabled: true # false - issues on microk8s?
 
     kubeControllerManager:
-      enabled: false
+      enabled: false # false - issues on microk8s?
 
     kubeScheduler:
-      enabled: false
+      enabled: true # false - issues on microk8s?
 
     alertmanager:
       service:
-        type: LoadBalancer
+        nodePort: ""
+        type: ClusterIP
       config:
         global:
           resolve_timeout: 5m
@@ -89,18 +90,79 @@ spec:
         externalUrl: 'http://alertmanager.home.jamesmoriarty.xyz/'
 
     grafana:
+      deploymentStrategy:
+        type: Recreate
       service:
-        type: LoadBalancer
+        nodePort: ""
+        type: ClusterIP
       additionalDataSources:
         - name: Loki
           type: loki
           url:  http://loki-stack.monitoring.svc.cluster.local:3100
+      dashboardProviders:
+        dashboardproviders.yaml:
+          apiVersion: 1
+          providers:
+          - name: 'default'
+            orgId: 1
+            folder: ''
+            type: file
+            disableDeletion: false
+            editable: true
+            options:
+              path: /var/lib/grafana/dashboards/default
+      dashboards:
+        default:
+          cilium:
+            url: https://grafana.com/api/dashboards/10598/revisions/1/download
+            datasource: Prometheus
+          flux-cluster:
+            url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/cluster.json
+            datasource: Prometheus
+          flux-control-plane:
+            url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/control-plane.json
+            datasource: Prometheus
 
     prometheus:
       service:
-        type: LoadBalancer
+        nodePort: ""
+        type: ClusterIP
       prometheusSpec:
+        ruleSelectorNilUsesHelmValues: false
+        serviceMonitorSelectorNilUsesHelmValues: false
+        podMonitorSelectorNilUsesHelmValues: false
         externalUrl: 'http://prometheus.home.jamesmoriarty.xyz/'
+        additionalScrapeConfigs:
+        - job_name: kubernetes-pods
+          kubernetes_sd_configs:
+          - role: pod
+          relabel_configs:
+          - action: keep
+            regex: true
+            source_labels:
+            - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+          - action: replace
+            regex: (.+)
+            source_labels:
+            - __meta_kubernetes_pod_annotation_prometheus_io_path
+            target_label: __metrics_path__
+          - action: replace
+            regex: ([^:]+)(?::\d+)?;(\d+)
+            replacement: $1:$2
+            source_labels:
+            - __address__
+            - __meta_kubernetes_pod_annotation_prometheus_io_port
+            target_label: __address__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_namespace
+            target_label: kubernetes_namespace
+          - action: replace
+            source_labels:
+            - __meta_kubernetes_pod_name
+            target_label: kubernetes_pod_name
 
   valuesFrom:
   - secretFileRef:

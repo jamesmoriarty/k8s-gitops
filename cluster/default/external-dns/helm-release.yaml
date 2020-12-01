@@ -14,7 +14,7 @@ metadata:
   name: external-dns
   namespace: default
 spec:
-  interval: 1m
+  interval: 2m
   chart:
     spec:
       chart: external-dns
@@ -23,9 +23,11 @@ spec:
         kind: HelmRepository
         name: bitnami
         namespace: default
-      interval: 1m
+      interval: 2m
     
   values: # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/values.yaml
+    metrics:
+      enabled: true
     extraEnv:
       - name: EXTERNAL_DNS_DOMAIN_FILTER
         valueFrom:

@@ -3,14 +3,17 @@
 # Feature: uninstall https://rancher.com/docs/k3s/latest/en/installation/uninstall/
 # /usr/local/bin/k3s-uninstall.sh
 
-KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 MASTER_IP=10.0.0.238
 
-# https://docs.cilium.io/en/v1.9/gettingstarted/k3s/
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable-network-policy --no-flannel --node-ip=$MASTER_IP --node-external-ip=$MASTER_IP --bind-address=$MASTER_IP" sh -
+KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+# Feature: https://docs.cilium.io/en/v1.9/gettingstarted/k3s/ Bugfix: https://github.com/rancher/k3s/issues/389
+curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="0644" INSTALL_K3S_EXEC="--disable-network-policy --no-flannel --node-ip=$MASTER_IP --node-external-ip=$MASTER_IP --bind-address=$MASTER_IP" sh -
 sudo mount bpffs -t bpf /sys/fs/bpf
-sudo chmod 644 $KUBECONFIG # https://github.com/rancher/k3s/issues/389
-k3s kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/v1.9/install/kubernetes/quick-install.yaml
+k3s kubectl apply -f cilium.yaml
+k3s kubectl apply -f hubble.yaml
+
+kubectl wait -n kube-system --for=condition=available --timeout=60s --all deployments
 
 # Refinment: use user home host storage:
 
@@ -18,9 +21,9 @@ sudo mkdir -p /var/k8s-gitops/
 sudo ln -sf /var/k8s-gitops/ "$HOME/Downloads"
 
 # Refinement: aliases:
-#
+
 cat <<-EOF > ~/.bash_aliases
-alias kubectl=' k3s kubectl'
+alias kubectl='k3s kubectl'
 alias k='kubectl'
 alias kgp='kubectl get pods'
 EOF
@@ -38,9 +41,15 @@ sudo snap install kubectl --classic
 
 flux --kubeconfig=$KUBECONFIG check --pre 
 
+# Feature: Flux2
+
 flux --kubeconfig=$KUBECONFIG bootstrap github \
   --owner=$GITHUB_USER \
   --repository=k8s-gitops \
   --branch=main \
   --path=cluster \
   --personal
+
+kubectl wait -n flux-system --for=condition=available --timeout=60s --all deployments
+
+k3s kubectl apply -f secrets.yaml

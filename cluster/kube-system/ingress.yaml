@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hubble
+  namespace: kube-system
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: 'hubble.home.jamesmoriarty.xyz'
+spec:
+  rules:
+  - host: 'hubble.home.jamesmoriarty.xyz'
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hubble-ui
+            port:
+              number: 80
