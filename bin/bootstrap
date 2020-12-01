@@ -1,47 +1,66 @@
-#!/bin/sh -ex
-
-# Feature: uninstall https://rancher.com/docs/k3s/latest/en/installation/uninstall/
-# /usr/local/bin/k3s-uninstall.sh
-
-MASTER_IP=10.0.0.238
+#!/bin/sh -eux
+#
+# uninstall https://rancher.com/docs/k3s/latest/en/installation/uninstall/ or /usr/local/bin/k3s-uninstall.sh
 
 KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
-# Feature: https://docs.cilium.io/en/v1.9/gettingstarted/k3s/ Bugfix: https://github.com/rancher/k3s/issues/389
-curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="0644" INSTALL_K3S_EXEC="--disable-network-policy --no-flannel --node-ip=$MASTER_IP --node-external-ip=$MASTER_IP --bind-address=$MASTER_IP" sh -
-sudo mount bpffs -t bpf /sys/fs/bpf
-k3s kubectl apply -f cilium.yaml
-k3s kubectl apply -f hubble.yaml
+CIDR_CLUSTER=192.168.0.0/16
+CIDR_SERVICE=192.168.0.0/16
 
-kubectl wait -n kube-system --for=condition=available --timeout=60s --all deployments
+IP_MASTER=10.0.0.238
+IP_DNS=192.168.10.10
+
+# Bugfix: mv to '/opt/bin/k3s': No such file or directory:
+sudo mkdir -p /opt/bin/
+
+# Feature: k3s. Bugfix: https://github.com/rancher/k3s/issues/389
+if [ ! -f "/opt/bin/k3s" ]; then
+  curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="0644" INSTALL_K3S_EXEC="--disable-network-policy --no-flannel --cluster-cidr=$CIDR_CLUSTER --service-cidr=$CIDR_SERVICE --cluster-dns=$IP_DNS --node-ip=$IP_MASTER --node-external-ip=$IP_MASTER --bind-address=$IP_MASTER" sh -
+  
+  sleep 120
+
+  # Feature: Cilium. https://docs.cilium.io/en/v0.9/gettingstarted/k3s/ 
+  sudo mount bpffs -t bpf /sys/fs/bpf
+  helm repo add cilium https://helm.cilium.io/
+  helm template cilium cilium/cilium \
+    --version=0.9.0 \
+    --namespace=kube-system \
+    --values=helm/cilium/install/values.yaml \
+    --output-dir=./helm
+  k3s kubectl apply -n kube-system -f ./helm//cilium/templates/
+
+  # Bugfix: cluster going dark:
+  k3s kubectl wait -n kube-system --for=condition=available --timeout=120s --all deployments
+fi
+
+# Bugfix: Command 'k3s' not found:
+PATH=$PATH:/opt/bin
 
 # Refinment: use user home host storage:
-
 sudo mkdir -p /var/k8s-gitops/
 sudo ln -sf /var/k8s-gitops/ "$HOME/Downloads"
 
 # Refinement: aliases:
-
 cat <<-EOF > ~/.bash_aliases
 alias kubectl='k3s kubectl'
 alias k='kubectl'
+alias ka='kubectl apply'
 alias kgp='kubectl get pods'
 EOF
 
 # . ~/.bash_aliases
 
-curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
+# Feature: Flux2. https://fluxcd.io/
+if [ ! -f "/usr/local/bin/flux" ]; then
+  curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
+fi
 
 # Bugfix: Prerequisites.
 # ✔ kubectl >=1.18.0
 # ✔ Kubernetes  >=1.16.0
 # ✔ prerequisites checks passed
-
 sudo snap install kubectl --classic
-
 flux --kubeconfig=$KUBECONFIG check --pre 
-
-# Feature: Flux2
 
 flux --kubeconfig=$KUBECONFIG bootstrap github \
   --owner=$GITHUB_USER \
@@ -50,6 +69,6 @@ flux --kubeconfig=$KUBECONFIG bootstrap github \
   --path=cluster \
   --personal
 
-kubectl wait -n flux-system --for=condition=available --timeout=60s --all deployments
+k3s kubectl wait -n flux-system --for=condition=available --timeout=60s --all deployments
 
 k3s kubectl apply -f secrets.yaml
