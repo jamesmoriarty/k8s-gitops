@@ -3,11 +3,10 @@ kind: Service
 metadata:
   name: transmission
 spec:
-  type: LoadBalancer
   selector:
     app: transmission
   ports:
     - protocol: TCP
-      port: 9091
+      port: 80
       targetPort: 9091
 

@@ -64,6 +64,8 @@ spec:
       enabled: false
 
     alertmanager:
+      service:
+        type: LoadBalancer
       config:
         global:
           resolve_timeout: 5m
@@ -84,16 +86,10 @@ spec:
           - channel: '#k8s-gitops'
             send_resolved: true
       alertmanagerSpec:
-        externalUrl: 'http://alertmanager.home.jamesmoriarty.xyz:9093/'
-      service:
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "alertmanager.home.jamesmoriarty.xyz"
-        type: LoadBalancer
+        externalUrl: 'http://alertmanager.home.jamesmoriarty.xyz/'
 
     grafana:
       service:
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "grafana.home.jamesmoriarty.xyz"
         type: LoadBalancer
       additionalDataSources:
         - name: Loki
@@ -101,12 +97,10 @@ spec:
           url:  http://loki-stack.monitoring.svc.cluster.local:3100
 
     prometheus:
-      prometheusSpec:
-        externalUrl: 'http://prometheus.home.jamesmoriarty.xyz:9090/'
       service:
-        annotations:
-          external-dns.alpha.kubernetes.io/hostname: "prometheus.home.jamesmoriarty.xyz"
         type: LoadBalancer
+      prometheusSpec:
+        externalUrl: 'http://prometheus.home.jamesmoriarty.xyz/'
 
   valuesFrom:
   - secretFileRef:
