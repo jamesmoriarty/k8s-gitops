@@ -1,4 +1,6 @@
-#!/bin/sh -ex
+#!/bin/sh -e
+
+HOSTNAME=ip.home.jamesmoriarty.xyz
 
 sudo wg show # && exit || echo "Installing..."
 
@@ -11,7 +13,7 @@ wg genkey | tee $HOME/wireguard/privatekey | wg pubkey > $HOME/wireguard/publick
 sudo tee "/etc/wireguard/wg0.conf" > /dev/null <<EOF
 [Interface]
 PrivateKey = $(cat $HOME/wireguard/privatekey)
-Address = 10.0.0.1/24, fd86:ea04:1115::1/64
+Address = 10.0.0.1/24
 ListenPort = 51820
 PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE; ip6tables -A FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE; ip6tables -D FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
@@ -31,16 +33,16 @@ sudo apt install -y qrencode
 
 sudo mkdir -p /etc/wireguard/clients/
 
-sudo tee "/etc/wireguard/clients/mobile.conf" > /dev/null <<EOF
+sudo tee "/etc/wireguard/clients/mobile.conf" > /dev/null <<-EOF
 [Interface]
 PrivateKey = $(cat $HOME/wireguard/privatekey)
 Address = 10.0.0.1/24
-DNS = 1.1.1.1, 1.0.0.1
+ListenPort = 51820
 
 [Peer]
 PublicKey = $(cat $HOME/wireguard/publickey)
-AllowedIPs = 0.0.0.0/0
-Endpoint = ip.home.jamesmoriarty.xyz:51820
+AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = $HOSTNAME:51820
 EOF
 
-sudo cat "/etc/wireguard/clients/mobile.conf" | qrencode -t ansiutf8 - 
+sudo cat "/etc/wireguard/clients/mobile.conf" | qrencode -t ansiutf8
