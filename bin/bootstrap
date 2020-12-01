@@ -1,15 +1,16 @@
 #!/bin/sh -ex
 
+# Feature: uninstall https://rancher.com/docs/k3s/latest/en/installation/uninstall/
+# /usr/local/bin/k3s-uninstall.sh
+
 KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+MASTER_IP=10.0.0.238
 
-# https://k3s.io/
-curl -sfL https://get.k3s.io | sh -
-
-# https://github.com/rancher/k3s/issues/389
-sudo chmod 644 /etc/rancher/k3s/k3s.yaml
-
-# https://k3s.io/
-k3s kubectl get node
+# https://docs.cilium.io/en/v1.9/gettingstarted/k3s/
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--disable-network-policy --no-flannel --node-ip=$MASTER_IP --node-external-ip=$MASTER_IP --bind-address=$MASTER_IP" sh -
+sudo mount bpffs -t bpf /sys/fs/bpf
+sudo chmod 644 $KUBECONFIG # https://github.com/rancher/k3s/issues/389
+k3s kubectl apply -f https://raw.githubusercontent.com/cilium/cilium/v1.9/install/kubernetes/quick-install.yaml
 
 # Refinment: use user home host storage:
 
@@ -24,7 +25,7 @@ alias k='kubectl'
 alias kgp='kubectl get pods'
 EOF
 
-. ~/.bash_aliases
+# . ~/.bash_aliases
 
 curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
 
@@ -35,9 +36,9 @@ curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
 
 sudo snap install kubectl --classic
 
-flux --kubeconfig=/etc/rancher/k3s/k3s.yaml check --pre 
+flux --kubeconfig=$KUBECONFIG check --pre 
 
-flux --kubeconfig=/etc/rancher/k3s/k3s.yaml bootstrap github \
+flux --kubeconfig=$KUBECONFIG bootstrap github \
   --owner=$GITHUB_USER \
   --repository=k8s-gitops \
   --branch=main \

@@ -4,7 +4,8 @@ Repo for my k8s home lab.
 
 ## Features
 
-* Microk8s (Host Storage)
+* K3s
+* Cilium
 * Flux2
 * MetalLB (L2)
 * ExternalDNS (AWS/Route53)
