@@ -8,7 +8,7 @@ metadata:
   annotations:
     external-dns.alpha.kubernetes.io/hostname: "transmission.home.jamesmoriarty.xyz"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: transmission

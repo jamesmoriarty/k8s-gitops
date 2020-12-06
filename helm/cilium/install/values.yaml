@@ -1,3 +1,26 @@
+# kubectl exec -n kube-system -t ds/cilium -- hubble observe
+# kubectl exec -n kube-system -t ds/cilium -- hubble observe -t drop --follow
+
+# nativeRoutingCIDR allows to explicitly specify the CIDR for native routing. This
+# value corresponds to the configured cluster-cidr.
+nativeRoutingCIDR: 10.0.0.0/24
+
+# tunnel is the encapsulation configuration for communication between nodes
+tunnel: disabled
+
+# kubeProxyReplacement enables kube-proxy replacement in Cilium BPF datapath
+# kubeProxyReplacement: strict
+
+# kubeProxyReplacement healthz server bind address
+# To enable set the value to '0.0.0.0:10256' for all ipv4
+# addresses and this '[::]:10256' for all ipv6 addresses.
+# By default it is disabled.
+# kubeProxyReplacementHealthzBindAddr: '0.0.0.0:10256'
+
+# autoDirectNodeRoutes enables installation of PodCIDR routes between worker
+# nodes if worker nodes share a common L2 network segment.
+autoDirectNodeRoutes: true
+
 ipam:
   # -- Configure IP Address Management mode.
   # ref: https://docs.cilium.io/en/stable/concepts/networking/ipam/
@@ -16,6 +39,7 @@ prometheus:
 
 hubble:
   enabled: true
+  listenAddress: '10.0.0.238:4244'
   metrics:
     enabled:
     - dns:query;ignoreAAAA
