@@ -30,8 +30,8 @@ spec:
       - image: vladgh/minidlna
         name: minidlna
         ports:
-        - containerPort: 8020
-          hostPort: 8020
+        - containerPort: 8200
+          hostPort: 8200
           protocol: TCP
         - containerPort: 1900
           hostPort: 1900
