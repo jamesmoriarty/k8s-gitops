@@ -15,6 +15,7 @@ sleep 120
 # Feature: Cilium. https://docs.cilium.io/en/v0.9/gettingstarted/k3s/ 
 sudo mount bpffs -t bpf /sys/fs/bpf
 helm repo add cilium https://helm.cilium.io/
+helm repo update
 helm template cilium cilium/cilium \
   --version=1.9.3 \
   --namespace=kube-system \

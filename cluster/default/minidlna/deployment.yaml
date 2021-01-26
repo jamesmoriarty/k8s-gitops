@@ -37,7 +37,7 @@ spec:
           hostPort: 1900
           protocol: UDP
         securityContext:
-          allowPrivilegeEscalation: false
+          allowPrivilegeEscalation: true
           capabilities:
             add:
             - NET_ADMIN
