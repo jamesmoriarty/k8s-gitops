@@ -16,7 +16,7 @@ sleep 120
 sudo mount bpffs -t bpf /sys/fs/bpf
 helm repo add cilium https://helm.cilium.io/
 helm template cilium cilium/cilium \
-  --version=1.9.1 \
+  --version=1.9.3 \
   --namespace=kube-system \
   --values=helm/cilium/install/values.yaml \
   --output-dir=./helm
