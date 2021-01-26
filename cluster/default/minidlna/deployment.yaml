@@ -36,16 +36,6 @@ spec:
         - containerPort: 1900
           hostPort: 1900
           protocol: UDP
-        securityContext:
-          allowPrivilegeEscalation: true
-          capabilities:
-            add:
-            - NET_ADMIN
-            - NET_RAW
-            - SYS_ADMIN
-            drop:
-            - ALL
-          readOnlyRootFilesystem: false
         env:
         - name: MINIDLNA_FRIENDLY_NAME
           value: hombernetes
