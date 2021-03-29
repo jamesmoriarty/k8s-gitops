@@ -186,6 +186,7 @@ spec:
         #       replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
 
         - job_name: kubernetes-services
+          scrape_interval: 300s
           metrics_path: /metrics
           params:
             module: [http_2xx]
@@ -208,7 +209,7 @@ spec:
               target_label: kubernetes_name
               
         - job_name: kubernetes-pods
-          scrape_interval: 180s
+          scrape_interval: 300s
           kubernetes_sd_configs:
           - role: pod
           relabel_configs:
