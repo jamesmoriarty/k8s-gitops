@@ -41,7 +41,7 @@ ipam:
   mode: "cluster-pool"
   operator:
     # -- IPv4 CIDR range to delegate to individual nodes for IPAM.
-    clusterPoolIPv4PodCIDR: "192.168.0.0/16"
+    clusterPoolIPv4PodCIDR: "10.0.0.0/16"
     # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
     clusterPoolIPv4MaskSize: 24
 
@@ -53,7 +53,7 @@ prometheus:
 
 hubble:
   enabled: true
-  listenAddress: '10.0.0.238:4244'
+  listenAddress: '192.168.0.211:4244'
   metrics:
     enabled:
     - dns:query;ignoreAAAA

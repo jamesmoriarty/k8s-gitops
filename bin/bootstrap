@@ -10,7 +10,8 @@ sudo mkdir -p /opt/bin/
 # Feature: k3s. Bugfix: https://github.com/rancher/k3s/issues/389
 curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="0644" INSTALL_K3S_EXEC="--flannel-backend=none --no-flannel --disable-network-policy" sh -
 
-sleep 120
+# Bugfix: no helm  on fresh install.
+sudo snap install helm --classic
 
 # Feature: Cilium. https://docs.cilium.io/en/v0.9/gettingstarted/k3s/ 
 sudo mount bpffs -t bpf /sys/fs/bpf
