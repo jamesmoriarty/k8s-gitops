@@ -14,7 +14,7 @@ metadata:
   name: kube-prometheus-stack
   namespace: monitoring
 spec:
-  interval: 2m
+  interval: 5m
   chart:
     spec:
       chart: kube-prometheus-stack
@@ -23,7 +23,7 @@ spec:
         kind: HelmRepository
         name: prometheus-community
         namespace: monitoring
-      interval: 2m
+      interval: 5m
 
   values: # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
     defaultRules:

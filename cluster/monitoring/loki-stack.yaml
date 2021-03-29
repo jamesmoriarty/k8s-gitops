@@ -14,7 +14,7 @@ metadata:
   name: loki-stack
   namespace: monitoring
 spec:
-  interval: 2m
+  interval: 5m
   chart:
     spec:
       chart: loki-stack
@@ -23,4 +23,4 @@ spec:
         kind: HelmRepository
         name: loki
         namespace: monitoring
-      interval: 2m
+      interval: 5m
