@@ -208,6 +208,7 @@ spec:
               target_label: kubernetes_name
               
         - job_name: kubernetes-pods
+          scrape_interval: 180s
           kubernetes_sd_configs:
           - role: pod
           relabel_configs:
