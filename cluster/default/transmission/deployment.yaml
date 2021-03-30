@@ -22,7 +22,7 @@ spec:
       volumes:
       - name: downloads
         hostPath:
-          path: /var/hombernetes/downloads
+          path: /home/james/downloads
           type: Directory
       containers:
       - image: ghcr.io/linuxserver/transmission
