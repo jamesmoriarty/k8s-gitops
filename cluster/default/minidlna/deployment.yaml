@@ -24,7 +24,7 @@ spec:
       volumes:
         - name: downloads
           hostPath:
-            path: /var/hombernetes/downloads
+            path: /home/james/downloads
             type: Directory
       containers:
       - image: vladgh/minidlna
@@ -38,7 +38,7 @@ spec:
           protocol: UDP
         env:
         - name: MINIDLNA_FRIENDLY_NAME
-          value: hombernetes
+          value: k8s-gitops
         - name: MINIDLNA_MEDIA_DIR
           value: /downloads
         volumeMounts:
