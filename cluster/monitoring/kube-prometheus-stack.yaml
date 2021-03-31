@@ -142,8 +142,8 @@ spec:
           token_url: https://github.com/login/oauth/access_token
           api_url: https://api.github.com/user
           allowed_organizations: jamesmoriartyxyz
-          client_id: $__file{/etc/secrets/auth_github_oauth/client_id}
-          client_secret: $__file{/etc/secrets/auth_github_oauth/client_secret}
+          client_id: $__file{/etc/secrets/auth-github-oauth/client_id}
+          client_secret: $__file{/etc/secrets/auth-github-oauth/client_secret}
 
     prometheus:
       service:
