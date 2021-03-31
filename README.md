@@ -4,27 +4,26 @@ Repo for my k8s home lab.
 
 ## Features
 
-* K3s
-* Cilium
-* Flux2
-* MetalLB (L2)
+### Kubernetes Distribution
+
+K3s
+
+### Container Network Interface (CNI): 
+
+Cilium
+
+### Continuous Delivery
+
+Flux2
+
+### Workloads
+
 * ExternalDNS (AWS/Route53)
 * DynamicDNS (CronJob/ExternalDNS/Ingress)
 * Transmission (NAT/UDP)
 * MiniDLNA (UPnP/UDP)
 * Monitoring (Helm/kube-prometheus-stack)
 * Logging (Helm/loki-stack)
-
-## Diagram
-
-![Arch](docs/arch.png)
-
-
-## Requirements
-
-```
-Ubuntu 20.04.1 LTS
-```
 
 ## Setup
 
