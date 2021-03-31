@@ -132,6 +132,8 @@ spec:
         mountPath: /etc/secrets/auth_github_oauth
         readOnly: true
       grafana.ini:
+        server:
+          root_url: http://grafana.home.jamesmoriarty.xyz
         auth.basic:
           disable_login_form: true
         auth.github:
