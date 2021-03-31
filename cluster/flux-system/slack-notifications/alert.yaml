@@ -2,7 +2,7 @@
 apiVersion: notification.toolkit.fluxcd.io/v1beta1
 kind: Alert
 metadata:
-  name: k8-gitops
+  name: k8s-gitops
   namespace: flux-system
 spec:
   providerRef:
@@ -13,3 +13,31 @@ spec:
       name: '*'
     - kind: Kustomization
       name: '*'
+  suspend: false
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta1
+kind: Alert
+metadata:
+  name: helmreleases
+  namespace: flux-system
+spec:
+  providerRef:
+    name: slack
+  eventSeverity: error
+  eventSources:
+    - kind: HelmRelease
+      namespace: 'kube-system'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'flux-system'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'monitoring'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'network'
+      name: '*'
+    - kind: HelmRelease
+      namespace: 'security'
+      name: '*'
+  suspend: false
