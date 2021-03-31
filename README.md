@@ -8,7 +8,7 @@ Repo for my k8s home lab.
 
 K3s
 
-### Container Network Interface (CNI): 
+### Container Network Interface
 
 Cilium
 
