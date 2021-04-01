@@ -24,7 +24,7 @@ spec:
       volumes:
         - name: downloads
           hostPath:
-            path: /home/james/downloads
+            path: /var/k8s-gitops/downloads
             type: Directory
       containers:
       - image: vladgh/minidlna

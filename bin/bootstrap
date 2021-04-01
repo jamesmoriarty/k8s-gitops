@@ -1,7 +1,6 @@
 #!/bin/sh -eux
 #
 # uninstall https://rancher.com/docs/k3s/latest/en/installation/uninstall/ or /usr/local/bin/k3s-uninstall.sh
-
 KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 # Bugfix: mv to '/opt/bin/k3s': No such file or directory:
@@ -31,8 +30,9 @@ k3s kubectl wait -n kube-system --for=condition=available --timeout=300s --all d
 PATH=$PATH:/opt/bin
 
 # Refinment: use user home host storage:
+mkdir -p $HOME/downloads
 sudo mkdir -p /var/k8s-gitops/
-sudo ln -sf /var/k8s-gitops/ "$HOME/Downloads"
+sudo ln -sf /var/k8s-gitops/downloads $HOME/downloads
 
 # Refinement: aliases:
 cat <<-EOF > ~/.bash_aliases
@@ -41,8 +41,6 @@ alias k='kubectl'
 alias ka='kubectl apply'
 alias kgp='kubectl get pods'
 EOF
-
-# . ~/.bash_aliases
 
 # Feature: Flux2. https://fluxcd.io/
 if [ ! -f "/usr/local/bin/flux" ]; then
