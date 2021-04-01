@@ -1,219 +1,219 @@
----
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: HelmRepository
-metadata:
-  name: prometheus-community
-  namespace: monitoring
-spec:
-  interval: 30m
-  url: https://prometheus-community.github.io/helm-charts
----
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
-kind: HelmRelease
-metadata:
-  name: kube-prometheus-stack
-  namespace: monitoring
-spec:
-  interval: 5m
-  chart:
-    spec:
-      chart: kube-prometheus-stack
-      version: 14.3.0
-      sourceRef:
-        kind: HelmRepository
-        name: prometheus-community
-        namespace: monitoring
-      interval: 10m
+# ---
+# apiVersion: source.toolkit.fluxcd.io/v1beta1
+# kind: HelmRepository
+# metadata:
+#   name: prometheus-community
+#   namespace: monitoring
+# spec:
+#   interval: 30m
+#   url: https://prometheus-community.github.io/helm-charts
+# ---
+# apiVersion: helm.toolkit.fluxcd.io/v2beta1
+# kind: HelmRelease
+# metadata:
+#   name: kube-prometheus-stack
+#   namespace: monitoring
+# spec:
+#   interval: 5m
+#   chart:
+#     spec:
+#       chart: kube-prometheus-stack
+#       version: 14.3.0
+#       sourceRef:
+#         kind: HelmRepository
+#         name: prometheus-community
+#         namespace: monitoring
+#       interval: 10m
 
-  values: # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
-    defaultRules:
-      create: true
-      rules:
-        alertmanager: true
-        etcd: true
-        general: true
-        k8s: true
-        kubeApiserver: true
-        kubeApiserverAvailability: true
-        kubeApiserverError: true
-        kubeApiserverSlos: true
-        kubelet: true
-        kubePrometheusGeneral: true
-        kubePrometheusNodeAlerting: true
-        kubePrometheusNodeRecording: true
-        kubernetesAbsent: true
-        kubernetesApps: false # kube-state-metrics crash
-        kubernetesResources: false # over committed on single node
-        kubernetesStorage: true
-        kubernetesSystem: false # can't scrape
-        kubeScheduler: false # can't scrape
-        kubeStateMetrics: true
-        network: true
-        node: true
-        prometheus: true
-        prometheusOperator: true
-        time: true
+#   values: # https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+#     defaultRules:
+#       create: true
+#       rules:
+#         alertmanager: true
+#         etcd: true
+#         general: true
+#         k8s: true
+#         kubeApiserver: true
+#         kubeApiserverAvailability: true
+#         kubeApiserverError: true
+#         kubeApiserverSlos: true
+#         kubelet: true
+#         kubePrometheusGeneral: true
+#         kubePrometheusNodeAlerting: true
+#         kubePrometheusNodeRecording: true
+#         kubernetesAbsent: true
+#         kubernetesApps: false # kube-state-metrics crash
+#         kubernetesResources: false # over committed on single node
+#         kubernetesStorage: true
+#         kubernetesSystem: false # can't scrape
+#         kubeScheduler: false # can't scrape
+#         kubeStateMetrics: true
+#         network: true
+#         node: true
+#         prometheus: true
+#         prometheusOperator: true
+#         time: true
 
-    kubelet:
-      enabled: true
+#     kubelet:
+#       enabled: true
 
-    kubeControllerManager:
-      enabled: false
+#     kubeControllerManager:
+#       enabled: false
 
-    kubeScheduler:
-      enabled: true
+#     kubeScheduler:
+#       enabled: true
 
-    alertmanager:
-      service:
-        nodePort: ""
-        type: ClusterIP
-      config:
-        global:
-          resolve_timeout: 5m
-        route:
-          group_by: ['job']
-          group_wait: 30s
-          group_interval: 5m
-          repeat_interval: 12h
-          receiver: 'slack-notifications'
-          routes:
-          - receiver: 'null'
-            match:
-              alertname: Watchdog
-        receivers:
-        - name: 'null'
-        - name: 'slack-notifications'
-          slack_configs:
-          - channel: '#k8s-gitops'
-            send_resolved: true
-      alertmanagerSpec:
-        externalUrl: 'http://alertmanager.home.jamesmoriarty.xyz/'
+#     alertmanager:
+#       service:
+#         nodePort: ""
+#         type: ClusterIP
+#       config:
+#         global:
+#           resolve_timeout: 5m
+#         route:
+#           group_by: ['job']
+#           group_wait: 30s
+#           group_interval: 5m
+#           repeat_interval: 12h
+#           receiver: 'slack-notifications'
+#           routes:
+#           - receiver: 'null'
+#             match:
+#               alertname: Watchdog
+#         receivers:
+#         - name: 'null'
+#         - name: 'slack-notifications'
+#           slack_configs:
+#           - channel: '#k8s-gitops'
+#             send_resolved: true
+#       alertmanagerSpec:
+#         externalUrl: 'http://alertmanager.home.jamesmoriarty.xyz/'
 
-    grafana:
-      deploymentStrategy:
-        type: Recreate
-      service:
-        nodePort: ""
-        type: ClusterIP
-      additionalDataSources:
-        - name: Loki
-          type: loki
-          url:  http://loki-stack.monitoring.svc.cluster.local:3100
-      dashboardProviders:
-        dashboardproviders.yaml:
-          apiVersion: 1
-          providers:
-          - name: 'default'
-            orgId: 1
-            folder: ''
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/default
-      dashboards:
-        default:
-          cilium-operator:
-            url: https://grafana.com/api/dashboards/10598/revisions/1/download
-            datasource: Prometheus
-          cilium-agent:
-            url: https://grafana.com/api/dashboards/10596/revisions/1/download
-            datasource: Prometheus
-          flux-cluster:
-            url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/cluster.json
-            datasource: Prometheus
-          flux-control-plane:
-            url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/control-plane.json
-            datasource: Prometheus
-      extraSecretMounts:
-      - name: auth-github-oauth-secret-mount
-        secretName: auth-github-oauth-secret
-        defaultMode: 0440
-        mountPath: /etc/secrets/auth_github_oauth
-        readOnly: true
-      grafana.ini:
-        server:
-          root_url: http://grafana.home.jamesmoriarty.xyz
-        auth.basic:
-          disable_login_form: true
-        auth.github:
-          enabled: true
-          allow_sign_up: true
-          scopes: user:email,read:org
-          auth_url: https://github.com/login/oauth/authorize
-          token_url: https://github.com/login/oauth/access_token
-          api_url: https://api.github.com/user
-          allowed_organizations: jamesmoriartyxyz
-          client_id: $__file{/etc/secrets/auth_github_oauth/client_id}
-          client_secret: $__file{/etc/secrets/auth_github_oauth/client_secret}
+#     grafana:
+#       deploymentStrategy:
+#         type: Recreate
+#       service:
+#         nodePort: ""
+#         type: ClusterIP
+#       additionalDataSources:
+#         - name: Loki
+#           type: loki
+#           url:  http://loki-stack.monitoring.svc.cluster.local:3100
+#       dashboardProviders:
+#         dashboardproviders.yaml:
+#           apiVersion: 1
+#           providers:
+#           - name: 'default'
+#             orgId: 1
+#             folder: ''
+#             type: file
+#             disableDeletion: false
+#             editable: true
+#             options:
+#               path: /var/lib/grafana/dashboards/default
+#       dashboards:
+#         default:
+#           cilium-operator:
+#             url: https://grafana.com/api/dashboards/10598/revisions/1/download
+#             datasource: Prometheus
+#           cilium-agent:
+#             url: https://grafana.com/api/dashboards/10596/revisions/1/download
+#             datasource: Prometheus
+#           flux-cluster:
+#             url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/cluster.json
+#             datasource: Prometheus
+#           flux-control-plane:
+#             url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/control-plane.json
+#             datasource: Prometheus
+#       extraSecretMounts:
+#       - name: auth-github-oauth-secret-mount
+#         secretName: auth-github-oauth-secret
+#         defaultMode: 0440
+#         mountPath: /etc/secrets/auth_github_oauth
+#         readOnly: true
+#       grafana.ini:
+#         server:
+#           root_url: http://grafana.home.jamesmoriarty.xyz
+#         auth.basic:
+#           disable_login_form: true
+#         auth.github:
+#           enabled: true
+#           allow_sign_up: true
+#           scopes: user:email,read:org
+#           auth_url: https://github.com/login/oauth/authorize
+#           token_url: https://github.com/login/oauth/access_token
+#           api_url: https://api.github.com/user
+#           allowed_organizations: jamesmoriartyxyz
+#           client_id: $__file{/etc/secrets/auth_github_oauth/client_id}
+#           client_secret: $__file{/etc/secrets/auth_github_oauth/client_secret}
 
-    prometheus:
-      service:
-        nodePort: ""
-        type: ClusterIP
-      prometheusSpec:
-        ruleSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
-        podMonitorSelectorNilUsesHelmValues: false
-        externalUrl: 'http://prometheus.home.jamesmoriarty.xyz/'
-        retention: 3d
-        additionalScrapeConfigs:
-        - job_name: kubernetes-services
-          scrape_interval: 300s
-          metrics_path: /metrics
-          params:
-            module: [http_2xx]
-          kubernetes_sd_configs:
-            - role: service
-          relabel_configs:
-            - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
-              action: keep
-              regex: true
-            - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
-              action: replace
-              regex: ([^:]+)(?::\d+)?;(\d+)
-              replacement: ${1}:${2}
-              target_label: __address__
-            - action: labelmap
-              regex: __meta_kubernetes_service_label_(.+)
-            - source_labels: [__meta_kubernetes_namespace]
-              target_label: kubernetes_namespace
-            - source_labels: [__meta_kubernetes_service_name]
-              target_label: kubernetes_name
+#     prometheus:
+#       service:
+#         nodePort: ""
+#         type: ClusterIP
+#       prometheusSpec:
+#         ruleSelectorNilUsesHelmValues: false
+#         serviceMonitorSelectorNilUsesHelmValues: false
+#         podMonitorSelectorNilUsesHelmValues: false
+#         externalUrl: 'http://prometheus.home.jamesmoriarty.xyz/'
+#         retention: 3d
+#         additionalScrapeConfigs:
+#         - job_name: kubernetes-services
+#           scrape_interval: 300s
+#           metrics_path: /metrics
+#           params:
+#             module: [http_2xx]
+#           kubernetes_sd_configs:
+#             - role: service
+#           relabel_configs:
+#             - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_probe]
+#               action: keep
+#               regex: true
+#             - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+#               action: replace
+#               regex: ([^:]+)(?::\d+)?;(\d+)
+#               replacement: ${1}:${2}
+#               target_label: __address__
+#             - action: labelmap
+#               regex: __meta_kubernetes_service_label_(.+)
+#             - source_labels: [__meta_kubernetes_namespace]
+#               target_label: kubernetes_namespace
+#             - source_labels: [__meta_kubernetes_service_name]
+#               target_label: kubernetes_name
               
-        - job_name: kubernetes-pods
-          scrape_interval: 300s
-          kubernetes_sd_configs:
-          - role: pod
-          relabel_configs:
-          - action: keep
-            regex: true
-            source_labels:
-            - __meta_kubernetes_pod_annotation_prometheus_io_scrape
-          - action: replace
-            regex: (.+)
-            source_labels:
-            - __meta_kubernetes_pod_annotation_prometheus_io_path
-            target_label: __metrics_path__
-          - action: replace
-            regex: ([^:]+)(?::\d+)?;(\d+)
-            replacement: $1:$2
-            source_labels:
-            - __address__
-            - __meta_kubernetes_pod_annotation_prometheus_io_port
-            target_label: __address__
-          - action: labelmap
-            regex: __meta_kubernetes_pod_label_(.+)
-          - action: replace
-            source_labels:
-            - __meta_kubernetes_namespace
-            target_label: kubernetes_namespace
-          - action: replace
-            source_labels:
-            - __meta_kubernetes_pod_name
-            target_label: kubernetes_pod_name
+#         - job_name: kubernetes-pods
+#           scrape_interval: 300s
+#           kubernetes_sd_configs:
+#           - role: pod
+#           relabel_configs:
+#           - action: keep
+#             regex: true
+#             source_labels:
+#             - __meta_kubernetes_pod_annotation_prometheus_io_scrape
+#           - action: replace
+#             regex: (.+)
+#             source_labels:
+#             - __meta_kubernetes_pod_annotation_prometheus_io_path
+#             target_label: __metrics_path__
+#           - action: replace
+#             regex: ([^:]+)(?::\d+)?;(\d+)
+#             replacement: $1:$2
+#             source_labels:
+#             - __address__
+#             - __meta_kubernetes_pod_annotation_prometheus_io_port
+#             target_label: __address__
+#           - action: labelmap
+#             regex: __meta_kubernetes_pod_label_(.+)
+#           - action: replace
+#             source_labels:
+#             - __meta_kubernetes_namespace
+#             target_label: kubernetes_namespace
+#           - action: replace
+#             source_labels:
+#             - __meta_kubernetes_pod_name
+#             target_label: kubernetes_pod_name
 
-  valuesFrom:
-  - secretFileRef:
-    kind: Secret
-    name: alertmanager
+#   valuesFrom:
+#   - secretFileRef:
+#     kind: Secret
+#     name: alertmanager
