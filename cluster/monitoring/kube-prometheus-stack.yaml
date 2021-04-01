@@ -55,13 +55,13 @@ spec:
         time: true
 
     kubelet:
-      enabled: true # false - issues on microk8s?
+      enabled: true
 
     kubeControllerManager:
-      enabled: false # false - issues on microk8s?
+      enabled: false
 
     kubeScheduler:
-      enabled: true # false - issues on microk8s?
+      enabled: true
 
     alertmanager:
       service:
@@ -156,6 +156,10 @@ spec:
         serviceMonitorSelectorNilUsesHelmValues: false
         podMonitorSelectorNilUsesHelmValues: false
         externalUrl: 'http://prometheus.home.jamesmoriarty.xyz/'
+        retention: 24h
+        storageSpec:
+          emptyDir:
+            medium: Memory
         additionalScrapeConfigs:
         - job_name: kubernetes-services
           scrape_interval: 300s
