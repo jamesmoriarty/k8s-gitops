@@ -115,6 +115,7 @@ spec:
         default:
           cert-manager:
             url: https://grafana.com/api/dashboards/11001/revisions/1/download
+            datasource: Prometheus
           cilium-operator:
             url: https://grafana.com/api/dashboards/10598/revisions/1/download
             datasource: Prometheus
@@ -126,6 +127,9 @@ spec:
             datasource: Prometheus
           flux-control-plane:
             url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/control-plane.json
+            datasource: Prometheus
+          nginx-ingess:
+            url: https://grafana.com/api/dashboards/9614/revisions/1/download
             datasource: Prometheus
       extraSecretMounts:
       - name: auth-github-oauth-secret-mount
