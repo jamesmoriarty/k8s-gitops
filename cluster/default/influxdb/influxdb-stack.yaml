@@ -29,10 +29,7 @@ spec:
       user: admin
       password: password
     persistence:
-      enabled: true
-      accessMode: ReadWriteOnce
-      size: 50Gi
-      mountPath: /root/.influxdbv2
+      enabled: false
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
