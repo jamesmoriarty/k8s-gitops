@@ -1,34 +1,64 @@
-# apiVersion: batch/v1beta1
-# kind: CronJob
-# metadata:
-#   name: ip
-# spec:
-#   schedule: "*/30 * * * *"
-#   jobTemplate:
-#     spec:
-#       template:
-#         spec:
-#           containers:
-#           - name: ip
-#             image: bitnami/kubectl
-#             command:
-#             - /bin/sh
-#             - -c
-#             - |
-#               cat << EOF > /tmp/ingress.yml && kubectl apply -f /tmp/ingress.yml
-#               apiVersion: networking.k8s.io/v1
-#               kind: Ingress
-#               metadata:
-#                 name: ip
-#                 annotations:
-#                   kubernetes.io/ingress.class: nginx
-#                   external-dns.alpha.kubernetes.io/hostname: '$IP_HOSTNAME'
-#                   external-dns.alpha.kubernetes.io/target: '$(curl --silent ifconfig.me)'
-#               spec:
-#                 rules:
-#                 - host: '$IP_HOSTNAME'
-#               EOF
-#             env:
-#             - name: IP_HOSTNAME
-#               value: ip.home.jamesmoriarty.xyz
-#           restartPolicy: OnFailure
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ip-manager
+  namespace: network
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  namespace: network
+  name: ip-manager
+rules:
+- apiGroups: [networking]
+  resources: [ingress]
+  verbs: [create, update]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ip-manager
+subjects:
+- kind: ServiceAccount
+  name: ip-manager
+  namespace: network
+roleRef:
+  kind: Role
+  name: ip-manager
+  apiGroup: ""
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: ip
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+        serviceAccountName: ip-manager
+          containers:
+          - name: ip
+            image: bitnami/kubectl
+            command:
+            - /bin/sh
+            - -c
+            - |
+              cat << EOF > /tmp/ingress.yml && kubectl apply -f /tmp/ingress.yml
+              apiVersion: networking.k8s.io/v1
+              kind: Ingress
+              metadata:
+                name: ip
+                annotations:
+                  kubernetes.io/ingress.class: nginx
+                  external-dns.alpha.kubernetes.io/hostname: '$IP_HOSTNAME'
+                  external-dns.alpha.kubernetes.io/target: '$(curl --silent ifconfig.me)'
+              spec:
+                rules:
+                - host: '$IP_HOSTNAME'
+              EOF
+            env:
+            - name: IP_HOSTNAME
+              value: ip.home.jamesmoriarty.xyz
+          restartPolicy: OnFailure
