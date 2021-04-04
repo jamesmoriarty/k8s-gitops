@@ -28,11 +28,10 @@ spec:
     adminUser:
       user: admin
       password: password
-
     persistence:
       enabled: true
       accessMode: ReadWriteOnce
-      size: 10Gi
+      size: 50Gi
       mountPath: /root/.influxdbv2
 ---
 apiVersion: networking.k8s.io/v1
