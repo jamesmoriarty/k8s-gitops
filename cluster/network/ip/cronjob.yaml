@@ -7,12 +7,16 @@ metadata:
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1beta1
 metadata:
-  namespace: network
   name: ip-manager
+  namespace: network
 rules:
-- apiGroups: [networking]
-  resources: [ingress]
-  verbs: [create, update]
+- apiGroups:
+  - networking
+  resources: 
+  - ingress
+  verbs:
+  - create
+  - update
 ---
 kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
@@ -37,7 +41,7 @@ spec:
     spec:
       template:
         spec:
-        serviceAccountName: ip-manager
+          serviceAccountName: ip-manager
           containers:
           - name: ip
             image: bitnami/kubectl
