@@ -25,6 +25,8 @@ spec:
         namespace: default
       interval: 10m
   values: # https://github.com/influxdata/helm-charts/blob/master/charts/influxdb2/values.yaml
+    user: admin
+    password: password
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
