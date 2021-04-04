@@ -11,10 +11,12 @@ metadata:
   namespace: network
 rules:
 - apiGroups:
+  - extensions
   - networking.k8s.io
   resources: 
   - ingresses
   verbs:
+  - list
   - get
   - create
   - update
