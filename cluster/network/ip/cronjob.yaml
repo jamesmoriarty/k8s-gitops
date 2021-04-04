@@ -35,6 +35,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: ip
+  namespace: network
 spec:
   schedule: "*/30 * * * *"
   jobTemplate:
