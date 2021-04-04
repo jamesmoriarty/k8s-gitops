@@ -128,9 +128,6 @@ spec:
           flux-control-plane:
             url: https://raw.githubusercontent.com/fluxcd/flux2/v0.4.2/manifests/monitoring/grafana/dashboards/control-plane.json
             datasource: Prometheus
-          nginx-ingess:
-            url: https://grafana.com/api/dashboards/9614/revisions/1/download
-            datasource: Prometheus
       extraSecretMounts:
       - name: auth-github-oauth-secret-mount
         secretName: auth-github-oauth-secret
