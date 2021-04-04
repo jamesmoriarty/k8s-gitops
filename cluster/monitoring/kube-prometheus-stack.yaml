@@ -134,6 +134,8 @@ spec:
       grafana.ini:
         server:
           root_url: http://grafana.home.jamesmoriarty.xyz
+        users:
+          viewers_can_edit: true
         auth.basic:
           disable_login_form: true
         auth.github:
