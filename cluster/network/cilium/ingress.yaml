@@ -2,10 +2,15 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hubble
-  namespace: kube-system
+  namespace: network
   annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt'
     external-dns.alpha.kubernetes.io/hostname: 'hubble.home.jamesmoriarty.xyz'
 spec:
+  tls:
+  - hosts:
+    - 'hubble.home.jamesmoriarty.xyz'
+    secretName: hubble-tls
   rules:
   - host: 'hubble.home.jamesmoriarty.xyz'
     http:
