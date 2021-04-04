@@ -1,0 +1,100 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: HelmRepository
+metadata:
+  name: cilium
+  namespace: network
+spec:
+  interval: 1h
+  url: https://helm.cilium.io/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: cilium
+  namespace:  network
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: cilium
+      version: 1.9.3
+      sourceRef:
+        kind: HelmRepository
+        name: cilium
+        namespace: cilium
+      interval: 10m
+  values:
+    # kubectl exec -n kube-system -t ds/cilium -- hubble observe
+    # kubectl exec -n kube-system -t ds/cilium -- hubble observe -t drop --follow
+    #
+    # kubectl exec -n kube-system -t ds/cilium -- cilium status
+    # kubectl exec -n kube-system -t ds/cilium -- cilium bpf tunnel list
+    #
+    # kubectl exec -n kube-system -t ds/cilium -- cilium-bugtool
+    # kubectl cp kube-system/cilium-kg8lv:/tmp/cilium-bugtool-20180411-155146.166+0000-UTC-266836983.tar /tmp/cilium-bugtool-20180411-155146.166+0000-UTC-266836983.tar
+
+    # autoDirectNodeRoutes enables installation of PodCIDR routes between worker
+    # nodes if worker nodes share a common L2 network segment.
+    autoDirectNodeRoutes: true
+
+    # externalIPs is the configuration for ExternalIPs service handling
+    externalIPs:
+      # enabled enables ExternalIPs functionality
+      enabled: true
+
+    # endpointRoutes enables use of per endpoint routes instead of routing vis
+    # the cilium_host interface
+    endpointRoutes:
+      enabled: false
+
+    # hostServices is the configuration for ClusterIP service handling in host namespace
+    hostServices:
+      # enabled enables host reachable functionality
+      enabled: true
+
+    # nodePort is the configuration for NodePort service handling
+    nodePort:
+      # enabled enables NodePort functionality
+      enabled: true
+
+    # masquerade enables masquerading of traffic leaving the node for
+    # destinations outside of the cluster.
+    masquerade: true
+
+    ipam:
+      # -- Configure IP Address Management mode.
+      # ref: https://docs.cilium.io/en/stable/concepts/networking/ipam/
+      mode: "cluster-pool"
+      operator:
+        # -- IPv4 CIDR range to delegate to individual nodes for IPAM.
+        clusterPoolIPv4PodCIDR: "10.0.0.0/16"
+        # -- IPv4 CIDR mask size to delegate to individual nodes for IPAM.
+        clusterPoolIPv4MaskSize: 24
+
+    monitor:
+      enabled: true
+
+    prometheus:
+      enabled: true
+
+    hubble:
+      enabled: true
+      listenAddress: '192.168.0.211:4244'
+      metrics:
+        enabled:
+        - dns:query;ignoreAAAA
+        - drop
+        - tcp
+        - flow
+        - icmp
+        - http
+      relay:
+        enabled: true
+      ui:
+        enabled: true
+
+    operator:
+      replicas: 1
+      prometheus:
+        enabled: true

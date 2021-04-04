@@ -12,16 +12,8 @@ curl -sfL https://get.k3s.io | K3S_KUBECONFIG_MODE="0644" INSTALL_K3S_EXEC="--fl
 # Bugfix: no helm  on fresh install.
 sudo snap install helm --classic
 
-# Feature: Cilium. https://docs.cilium.io/en/v0.9/gettingstarted/k3s/ 
+# Feature: Cilium. https://docs.cilium.io/en/v0.9/gettingstarted/k3s/
 sudo mount bpffs -t bpf /sys/fs/bpf
-helm repo add cilium https://helm.cilium.io/
-helm repo update
-helm template cilium cilium/cilium \
-  --version=1.9.3 \
-  --namespace=kube-system \
-  --values=helm/cilium/install/values.yaml \
-  --output-dir=./helm
-k3s kubectl apply -n kube-system -f ./helm//cilium/templates/
 
 # Bugfix: cluster going dark:
 k3s kubectl wait -n kube-system --for=condition=available --timeout=300s --all deployments
@@ -44,7 +36,7 @@ fi
 # ✔ Kubernetes  >=1.16.0
 # ✔ prerequisites checks passed
 sudo snap install kubectl --classic
-flux --kubeconfig=$KUBECONFIG check --pre 
+flux --kubeconfig=$KUBECONFIG check --pre
 
 flux --kubeconfig=$KUBECONFIG bootstrap github \
   --owner=$GITHUB_USER \
