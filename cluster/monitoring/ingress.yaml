@@ -4,7 +4,6 @@ metadata:
   name: alertmanager
   namespace: monitoring
   annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
     external-dns.alpha.kubernetes.io/hostname: 'alertmanager.home.jamesmoriarty.xyz'
 spec:
   tls:
@@ -29,7 +28,6 @@ metadata:
   name: grafana
   namespace: monitoring
   annotations:
-    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
     external-dns.alpha.kubernetes.io/hostname: 'grafana.home.jamesmoriarty.xyz'
 spec:
   tls:

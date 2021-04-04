@@ -87,7 +87,7 @@ spec:
           - channel: '#k8s-gitops'
             send_resolved: true
       alertmanagerSpec:
-        externalUrl: 'http://alertmanager.home.jamesmoriarty.xyz/'
+        externalUrl: 'https://alertmanager.home.jamesmoriarty.xyz/'
 
     grafana:
       deploymentStrategy:
@@ -133,7 +133,7 @@ spec:
         readOnly: true
       grafana.ini:
         server:
-          root_url: http://grafana.home.jamesmoriarty.xyz
+          root_url: https://grafana.home.jamesmoriarty.xyz
         users:
           viewers_can_edit: true
         auth.basic:
