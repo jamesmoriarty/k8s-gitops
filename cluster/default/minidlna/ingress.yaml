@@ -4,8 +4,13 @@ metadata:
   name: upnp
   namespace: default
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
     external-dns.alpha.kubernetes.io/hostname: 'upnp.home.jamesmoriarty.xyz'
 spec:
+  tls:
+  - hosts:
+    - 'upnp.home.jamesmoriarty.xyz'
+    secretName: upnp-tls
   rules:
   - host: 'upnp.home.jamesmoriarty.xyz'
     http:

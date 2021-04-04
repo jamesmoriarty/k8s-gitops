@@ -4,8 +4,13 @@ metadata:
   name: transmission
   namespace: default
   annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
     external-dns.alpha.kubernetes.io/hostname: 'transmission.home.jamesmoriarty.xyz'
 spec:
+  tls:
+  - hosts:
+    - 'transmission.home.jamesmoriarty.xyz'
+    secretName: transmission-tls
   rules:
   - host: 'transmission.home.jamesmoriarty.xyz'
     http:
