@@ -113,6 +113,8 @@ spec:
               path: /var/lib/grafana/dashboards/default
       dashboards:
         default:
+          cert-manager:
+            url: https://grafana.com/api/dashboards/11001/revisions/1/download
           cilium-operator:
             url: https://grafana.com/api/dashboards/10598/revisions/1/download
             datasource: Prometheus
