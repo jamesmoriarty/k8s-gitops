@@ -34,14 +34,6 @@ mkdir -p $HOME/downloads
 sudo mkdir -p /var/k8s-gitops/
 sudo ln -sf /var/k8s-gitops/downloads $HOME/downloads
 
-# Refinement: aliases:
-cat <<-EOF > ~/.bash_aliases
-alias kubectl='k3s kubectl'
-alias k='kubectl'
-alias ka='kubectl apply'
-alias kgp='kubectl get pods'
-EOF
-
 # Feature: Flux2. https://fluxcd.io/
 if [ ! -f "/usr/local/bin/flux" ]; then
   curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
@@ -65,7 +57,7 @@ k3s kubectl wait -n flux-system --for=condition=available --timeout=60s --all de
 
 k3s kubectl apply -f secrets.yaml
 
-
+# Bugfix: static ip:
 cat <<-EOF > /etc/netplan/01-netcfg.yaml
 network:
   version: 2
@@ -87,3 +79,10 @@ cat <<-EOF > /etc/cloud/cloud.cfg.d/99-disable-netowekr-config.cfg
 network: {config: disabled}
 EOF
 
+# Refinement: aliases:
+cat <<-EOF > ~/.bash_aliases
+alias kubectl='k3s kubectl'
+alias k='kubectl'
+alias ka='kubectl apply'
+alias kgp='kubectl get pods'
+EOF
