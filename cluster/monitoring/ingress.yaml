@@ -4,6 +4,7 @@ metadata:
   name: alertmanager
   namespace: monitoring
   annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt'
     external-dns.alpha.kubernetes.io/hostname: 'alertmanager.home.jamesmoriarty.xyz'
 spec:
   tls:
@@ -28,6 +29,7 @@ metadata:
   name: grafana
   namespace: monitoring
   annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt'
     external-dns.alpha.kubernetes.io/hostname: 'grafana.home.jamesmoriarty.xyz'
 spec:
   tls:
@@ -52,6 +54,7 @@ metadata:
   name: prometheus
   namespace: monitoring
   annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt'
     external-dns.alpha.kubernetes.io/hostname: 'prometheus.home.jamesmoriarty.xyz'
 spec:
   tls:
