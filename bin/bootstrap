@@ -49,7 +49,7 @@ flux --kubeconfig=$KUBECONFIG bootstrap github \
   --path=cluster \
   --personal
 
-k3s kubectl wait -n flux-system --for=condition=available --timeout=60s --all deployments
+k3s kubectl wait -n cert-manager --for=condition=Ready --all HelmRelease
 
 k3s kubectl apply -f secrets.yaml
 
