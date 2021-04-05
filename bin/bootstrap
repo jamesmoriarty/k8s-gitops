@@ -15,8 +15,9 @@ sudo snap install helm --classic
 # Feature: Cilium. https://docs.cilium.io/en/v0.9/gettingstarted/k3s/
 sudo mount bpffs -t bpf /sys/fs/bpf
 k3s kubectl apply -f cluster/network/namespace.yaml
-helm install cilium cilium/cilium --version 1.9.4 \
-   --namespace network
+helm install cilium cilium/cilium \
+  --version 1.9.4 \
+  --namespace network
 
 # Bugfix: cluster going dark:
 k3s kubectl wait -n network --for=condition=available --timeout=300s --all deployments
