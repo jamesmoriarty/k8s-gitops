@@ -1,0 +1,21 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+  namespace: cert-manager
+spec:
+  acme:
+    email: jamespaulmoriarty+letsencrypt@gmail.com
+    server: 'https://acme-v02.api.letsencrypt.org/directory'
+    privateKeySecretRef:
+      name: letsencrypt-secret
+    solvers:
+    - dns01:
+        route53:
+          region: ap-southeast-2
+          accessKeyID: AKIAWZSIWZIEAJ4HUDGA
+          hostedZoneID: Z0933032X41CPGT2FY5A
+          secretAccessKeySecretRef:
+            name: cert-manager
+            key: AWS_SECRET_ACCESS_KEY
