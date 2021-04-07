@@ -34,5 +34,5 @@ spec:
       config:
         alertmanager:
           hostport: "http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093"
-           minimumpriority: "notice"
+          minimumpriority: "notice"
      
