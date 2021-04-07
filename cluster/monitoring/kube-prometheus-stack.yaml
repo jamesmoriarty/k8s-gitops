@@ -110,15 +110,19 @@ spec:
               :information_source:
               {{- else -}}
               :question:
-              {{- end }} {{ .CommonLabels.alertname }}
+              {{- end }} {{ .CommonLabels.alertname }} {{- if .Annotations.summary }}
+                {{  .Annotations.summary }}
+              {{- end }}
             text: >-
               {{ range .Alerts }}
                 {{- if .Annotations.message }}
-                    {{ .Annotations.message }}
+                  {{ .Annotations.message }}
                 {{- end }}
                 {{- if .Annotations.description }}
-                    {{ .Annotations.description }}
+                  {{ .Annotations.description }}
                 {{- end }}
+                {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+                {{ end }}
               {{- end }}
       alertmanagerSpec:
         externalUrl: 'https://alertmanager.home.jamesmoriarty.xyz/'
