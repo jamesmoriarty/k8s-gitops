@@ -31,3 +31,6 @@ spec:
       enabled: true
       # https://github.com/falcosecurity/charts/blob/master/falcosidekick/values.yaml
       replicaCount: 1
+      alertmanager:
+        hostport: "http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093"
+     
