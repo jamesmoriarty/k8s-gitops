@@ -160,7 +160,6 @@ spec:
           slack_configs:
           - send_resolved: true
             channel: '#k8s-gitops'
-            username: 'Alert Manager'
             title: '{{ template "slack.monzo.title" . }}'
             icon_emoji: '{{ template "slack.monzo.icon_emoji" . }}'
             color: '{{ template "slack.monzo.color" . }}'
