@@ -26,6 +26,9 @@ spec:
       interval: 5m
     
   values: # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/values.yaml
+    provider: cloudflare
+    cloudflare:
+      proxied: false
     metrics:
       enabled: true
     extraEnv:
