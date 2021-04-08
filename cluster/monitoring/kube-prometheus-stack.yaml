@@ -110,9 +110,7 @@ spec:
               :information_source:
               {{- else -}}
               :question:
-              {{- end }} {{ .CommonLabels.alertname }} {{- if .Annotations.summary }} 
-                {{ .Annotations.summary }}
-              {{- end }}
+              {{- end }} {{ .CommonLabels.alertname }}
             text: >-
               {{ range .Alerts }}
                 {{- if .Annotations.message }}
