@@ -30,7 +30,7 @@ spec:
     cloudflare:
       proxied: false
     metrics:
-      enabled: true
+      enabled: false
     extraEnv:
       - name: EXTERNAL_DNS_DOMAIN_FILTER
         valueFrom:
