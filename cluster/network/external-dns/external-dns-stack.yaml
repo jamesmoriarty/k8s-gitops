@@ -39,13 +39,13 @@ spec:
           secretKeyRef:
             name: external-dns
             key: EXTERNAL_DNS_TXT_OWNER_ID
-      - name: AWS_ACCESS_KEY_ID
+      - name: CF_API_KEY
         valueFrom:
           secretKeyRef:
             name: external-dns
-            key: AWS_ACCESS_KEY_ID
-      - name: AWS_SECRET_ACCESS_KEY
+            key: CF_API_KEY
+      - name: CF_API_EMAIL
         valueFrom:
           secretKeyRef:
             name: external-dns
-            key: AWS_SECRET_ACCESS_KEY
+            key: CF_API_EMAIL
