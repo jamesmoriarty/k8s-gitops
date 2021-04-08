@@ -26,10 +26,26 @@ spec:
       interval: 5m
     
   values: # https://github.com/bitnami/charts/blob/master/bitnami/external-dns/values.yaml
-    provider: cloudflare
-    cloudflare:
-      proxied: false
-      email: jamespaulmoriarty@gmail.com
-      secretName: external-dns
     metrics:
       enabled: true
+    extraEnv:
+      - name: EXTERNAL_DNS_DOMAIN_FILTER
+        valueFrom:
+          secretKeyRef:
+            name: external-dns
+            key: EXTERNAL_DNS_DOMAIN_FILTER
+      - name: EXTERNAL_DNS_TXT_OWNER_ID
+        valueFrom:
+          secretKeyRef:
+            name: external-dns
+            key: EXTERNAL_DNS_TXT_OWNER_ID
+      - name: AWS_ACCESS_KEY_ID
+        valueFrom:
+          secretKeyRef:
+            name: external-dns
+            key: AWS_ACCESS_KEY_ID
+      - name: AWS_SECRET_ACCESS_KEY
+        valueFrom:
+          secretKeyRef:
+            name: external-dns
+            key: AWS_SECRET_ACCESS_KEY
