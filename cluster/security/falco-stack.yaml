@@ -28,7 +28,6 @@ spec:
     logLevel: error
     ebpf:
       enabled: true
-      path: /sys/fs/bpf
     falcosidekick:
       enabled: true
       config: # https://github.com/falcosecurity/charts/blob/master/falcosidekick/values.yaml
