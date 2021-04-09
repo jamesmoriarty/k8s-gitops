@@ -154,9 +154,9 @@ spec:
           repeat_interval: 12h
           receiver: 'slack-notifications'
           routes:
-          # - receiver: 'null'
-          #   match:
-          #     alertname: Watchdog
+          - receiver: 'null'
+            match:
+              alertname: Watchdog
           - receiver: 'null'
             match:
               source: falco
