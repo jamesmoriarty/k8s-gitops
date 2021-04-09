@@ -154,9 +154,12 @@ spec:
           repeat_interval: 12h
           receiver: 'slack-notifications'
           routes:
-          # - receiver: 'null'
-          #   match:
-          #     alertname: Watchdog
+          - receiver: 'null'
+            match:
+              alertname: Watchdog
+          - receiver: 'null'
+            match:
+              source: falco
         templates: # https://github.com/prometheus-community/helm-charts/pull/563/files
         - '/etc/alertmanager/config/*.tmpl'
         receivers:
