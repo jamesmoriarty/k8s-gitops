@@ -1,5 +1,3 @@
-
-
 ---
 apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: HelmRepository
@@ -27,11 +25,14 @@ spec:
         namespace: security
       interval: 5m
   values: # https://github.com/falcosecurity/charts/blob/master/falco/values.yaml
+    ebpf:
+      enabled: false
+      path: /sys/fs/bpf
     falcosidekick:
       enabled: true
       # https://github.com/falcosecurity/charts/blob/master/falcosidekick/values.yaml
       config:
         alertmanager:
           hostport: "http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093"
-          minimumpriority: "notice"
+          minimumpriority: "none"
      
