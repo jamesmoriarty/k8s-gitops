@@ -154,6 +154,8 @@ spec:
           # - receiver: 'null'
           #   match:
           #     alertname: Watchdog
+        templates: # https://github.com/prometheus-community/helm-charts/pull/563/files
+        - '/etc/alertmanager/config/*.tmpl'
         receivers:
         - name: 'null'
         - name: 'slack-notifications'
