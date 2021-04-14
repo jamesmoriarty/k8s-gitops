@@ -24,6 +24,7 @@ Flux2
 * MiniDLNA (UPnP/UDP)
 * Monitoring (Helm/kube-prometheus-stack)
 * Logging (Helm/loki-stack)
+* Security (Helm/falco)
 
 ## Setup
 
@@ -33,7 +34,7 @@ GITHUB_USERNAME= GITHUB_TOKEN= bin/bootstrap
 
 ## Notes
 
-- http://transmission.home.jamesmoriarty.xyz
-- http://alertmanager.home.jamesmoriarty.xyz/
 - http://grafana.home.jamesmoriarty.xyz/explore
+- http://alertmanager.home.jamesmoriarty.xyz/
 - http://prometheus.home.jamesmoriarty.xyz/
+- http://transmission.home.jamesmoriarty.xyz/
