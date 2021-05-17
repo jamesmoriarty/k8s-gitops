@@ -82,4 +82,7 @@ spec:
         name: falcosecurity
         namespace: security
       interval: 5m
+  values:
+    serviceMonitor:
+      enabled: true
      
