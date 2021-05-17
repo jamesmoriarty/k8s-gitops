@@ -28,6 +28,8 @@ spec:
     logLevel: error
     ebpf:
       enabled: true
+    grpc:
+      enabled: false
     falcosidekick:
       enabled: true
       config: # https://github.com/falcosecurity/charts/blob/master/falcosidekick/values.yaml
