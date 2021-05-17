@@ -30,6 +30,8 @@ spec:
       enabled: true
     grpc:
       enabled: false
+    grpcOutput:
+      enabled: true
     falcosidekick:
       enabled: true
       config: # https://github.com/falcosecurity/charts/blob/master/falcosidekick/values.yaml
