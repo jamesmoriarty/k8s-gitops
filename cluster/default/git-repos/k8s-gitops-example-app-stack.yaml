@@ -4,7 +4,10 @@ metadata:
   name: k8s-gitops-example-app
   namespace: flux-system
 spec:
-  interval: 1m
+  gitImplementation: go-git
+  interval: 1m0s
+  ref:
+    branch: main
   url: ssh://git@github.com/jamesmoriarty/k8s-gitops-example-app
   secretRef:
     name: flux-system
