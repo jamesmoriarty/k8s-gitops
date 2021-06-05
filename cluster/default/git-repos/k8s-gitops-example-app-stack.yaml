@@ -2,7 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: k8s-gitops-example-app
-  namespace: flux-system
+  namespace: default
 spec:
   interval: 1m
   ref:
@@ -15,6 +15,20 @@ spec:
     /*
     # include deploy dir
     !/k8s
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: flux-system
+  namespace: default
+spec:
+  interval: 1m0s
+  path: ./k8s
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: k8s-gitops-example-app
+  validation: client
 
 # ssh-keygen -q -N "" -f ./identity
 # ssh-keyscan github.com > ./known_hosts
