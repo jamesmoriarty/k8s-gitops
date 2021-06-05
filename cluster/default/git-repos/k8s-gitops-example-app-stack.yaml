@@ -1,16 +1,16 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta1
-kind: GitRepository
-metadata:
-  name: k8s-gitops-example-app
-  namespace: default
-spec:
-  gitImplementation: go-git
-  interval: 1m0s
-  ref:
-    branch: main
-  url: ssh://git@github.com/jamesmoriarty/k8s-gitops-example-app
-  secretRef:
-    name: flux-system
+# apiVersion: source.toolkit.fluxcd.io/v1beta1
+# kind: GitRepository
+# metadata:
+#   name: k8s-gitops-example-app
+#   namespace: default
+# spec:
+#   gitImplementation: go-git
+#   interval: 1m0s
+#   ref:
+#     branch: main
+#   url: ssh://git@github.com/jamesmoriarty/k8s-gitops-example-app
+#   secretRef:
+#     name: flux-system
 
 # ssh-keygen -q -N "" -f ./identity
 # ssh-keyscan github.com > ./known_hosts
