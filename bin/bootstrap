@@ -35,7 +35,7 @@ if [ ! -f "/usr/local/bin/flux" ]; then
   curl -s https://toolkit.fluxcd.io/install.sh | sudo bash
 fi
 
-# Bugfix: Prerequisites.
+# Bugfix: prerequisites.
 # ✔ kubectl >=1.18.0
 # ✔ Kubernetes  >=1.16.0
 # ✔ prerequisites checks passed
@@ -53,7 +53,7 @@ k3s kubectl wait -n cert-manager --for=condition=Ready --all HelmRelease
 
 k3s kubectl apply -f secrets.yaml
 
-# Bugfix: static ip:
+# Bugfix: static ip.
 cat <<-EOF > /etc/netplan/01-netcfg.yaml
 network:
   version: 2
