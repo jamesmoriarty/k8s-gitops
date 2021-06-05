@@ -2,13 +2,13 @@ apiVersion: source.toolkit.fluxcd.io/v1beta1
 kind: GitRepository
 metadata:
   name: k8s-gitops-example-app
-  namespace: default
+  namespace: flux-system
 spec:
   ref:
     branch: main
   url: ssh://git@github.com/jamesmoriarty/k8s-gitops-example-app
   secretRef:
-    name: flux-system
+    name: k8s-gitops-example-app
   ignore: |
     # exclude all
     /*
@@ -18,7 +18,7 @@ spec:
 # ssh-keygen -q -N "" -f ./identity
 # ssh-keyscan github.com > ./known_hosts
 
-# kubectl create secret generic flux-system \
+# kubectl create secret generic -n flux-system k8s-gitops-example-app \
 #     --from-file=./identity \
 #     --from-file=./identity.pub \
 #     --from-file=./known_hosts
