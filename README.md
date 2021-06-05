@@ -2,20 +2,6 @@
 
 Repo for my k8s home lab.
 
-## Features
-
-### Kubernetes Distribution
-
-K3s
-
-### Container Network Interface
-
-Cilium
-
-### Continuous Delivery
-
-Flux2
-
 ### Workloads
 
 * ExternalDNS (AWS/Route53)
@@ -29,7 +15,7 @@ Flux2
 ## Setup
 
 ```
-GITHUB_USERNAME= GITHUB_TOKEN= bin/bootstrap
+GITHUB_USERNAME=jamesmoriarty GITHUB_TOKEN=<...> bin/bootstrap
 ```
 
 ## Notes
