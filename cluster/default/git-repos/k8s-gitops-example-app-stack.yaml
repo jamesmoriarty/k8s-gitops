@@ -4,6 +4,7 @@ metadata:
   name: k8s-gitops-example-app
   namespace: flux-system
 spec:
+  interval: 1m
   ref:
     branch: main
   url: ssh://git@github.com/jamesmoriarty/k8s-gitops-example-app
