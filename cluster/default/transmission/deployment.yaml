@@ -26,6 +26,7 @@ spec:
           type: Directory
       containers:
       - image: ghcr.io/linuxserver/transmission
+        imagePullPolicy: Always
         name: transmission
         ports:
         - containerPort: 9091
