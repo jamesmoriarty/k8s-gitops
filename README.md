@@ -11,6 +11,23 @@ Repo for my k8s home lab.
 * Monitoring (Helm/kube-prometheus-stack)
 * Logging (Helm/loki-stack)
 * Security (Helm/falco)
+*...
+
+## Runbook
+
+### Low disk space on node
+
+On the node see the image cached locally run:
+
+```
+k3s crictl images
+```
+
+To remove unused images run:
+
+```
+k3s crictl rmi --prune
+```
 
 ## Setup
 
