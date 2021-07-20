@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: exposure-bot
+  name: exposure-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exposure-bot
+  template:
+    metadata:
+      labels:
+        app: exposure-bot
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: database
+        hostPath:
+          path: /var/k8s-gitops/
+          type: Directory
+      containers:
+      - image: ghcr.io/jamesmoriarty/victoria-exposure-site-bot:0.0.1
+        name: transmission
+        env:
+        - name: SLACK_URL
+          value: https://hooks.slack.com/services/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
+        - name: CSV_URL
+          value: https://docs.google.com/spreadsheets/d/e/2PACX-1vSNouXrJ8UQ-tn6bAxzrOdLINuoOtn01fSjooql0O3XQlj4_ldFiglzOmDm--t2jy1k-ABK6LMzPScs/pub?gid=1075463302&single=true&output=csv
+        - name: DATABASE
+          value: tmp/victoria-exposure-site-bot.db
+        volumeMounts:
+        - mountPath: /usr/src/app/tmp
+          name: database
