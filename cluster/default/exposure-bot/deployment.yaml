@@ -50,3 +50,10 @@ spec:
         volumeMounts:
         - mountPath: /usr/src/app/tmp
           name: database
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
