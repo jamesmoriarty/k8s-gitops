@@ -25,7 +25,7 @@ spec:
       imagePullSecrets:
         - name: dockerconfigjson-github-com
       containers:
-      - image: ghcr.io/jamesmoriarty/victoria-exposure-site-bot:0.0.2
+      - image: ghcr.io/jamesmoriarty/victoria-exposure-site-bot:0.0.3
         name: exposure-bot
         command: 
         - /bin/sh
